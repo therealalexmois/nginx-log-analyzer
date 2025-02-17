@@ -16,7 +16,7 @@ repos:
     -   id: double-quote-string-fixer
     -   id: end-of-file-fixer
     -   id: name-tests-test
-        args: [ --pytest-test-first ]
+        exclude: "^tests/.*/__init__\\.py$"
     -   id: trailing-whitespace
 -   repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.10.0
