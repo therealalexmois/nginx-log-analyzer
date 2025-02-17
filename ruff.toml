@@ -1,0 +1,170 @@
+# Файлы и каталоги для которых будут проводиться проверки
+include = ["*.py"]
+
+# Файлы и каталоги для которых не будут проводиться проверки
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+
+# Исключить из проверок объекты, указанные в .gitignore
+respect-gitignore = true
+
+# Версия Python
+target-version = "py312"
+
+# Автоматическое исправление ошибок
+fix = false
+
+# Формат вывода
+output-format = "concise"
+
+# Максимальная длина строки
+line-length = 120
+
+[lint]
+
+select = [
+    "ANN",      # flake8-annotations
+    "ASYNC",    # flake8-async
+    "ARG",      # flake8-unused-arguments
+    "T20",      # flake8-print
+    "TC",       # flake8-type-checking
+    "Q",        # flake8-quotes
+    "E",        # pycodestyle
+    "F",        # Pyflakes
+    "UP",       # pyupgrade
+    "B",        # flake8-bugbear
+    "SIM",      # flake8-simplify
+    "COM",      # flake8-commas
+    "I",        # isort
+    "D",        # pydocstyle
+    "W",        # pycodestyle
+    "PL",       # pylint rules
+    "N",        # pep8-naming
+    "C90",      # mccabe complexity
+]
+
+[lint.pydocstyle]
+convention = "google"
+
+[lint.flake8-annotations]
+# Можно ли указывать тип Any для *args, **kwargs
+allow-star-arg-any = true
+
+# Можно ли не указывать тип возвращаемого значения для функции __init__
+mypy-init-return = false
+
+# Можно ли не указывать тип значения для переменных "_"
+suppress-dummy-args = true
+
+# Можно ли не указывать тип возвращаемого значения если оно None
+suppress-none-returning = false
+
+[lint.flake8-pytest-style]
+
+# Указывать скобки для декоратора pytest.fixture если нет аргументов
+fixture-parentheses = false
+
+# Указывать скобки для декоратора pytest.mark.* если нет аргументов
+mark-parentheses = false
+
+# Способ передачи названия параметров в параметризированный тест
+#   csv - @pytest.mark.parametrize("name1,name2", ...)
+#   tuple - @pytest.mark.parametrize(("name1", "name2"), ...)
+#   list - @pytest.mark.parametrize(["name1", "name2"], ...)
+parametrize-names-type = "csv"
+
+# Способ передачи параметров в параметризированный тест
+#   tuple - @pytest.mark.parametrize(("name1", "name2"), [(1, 2), (3, 4)])
+#   list - @pytest.mark.parametrize(("name1", "name2"), [[1, 2], [3, 4]])
+parametrize-values-row-type = "tuple"
+
+# Способ передачи списка параметров в параметризированный тест
+#   tuple - @pytest.mark.parametrize("name", (1, 2, 3))
+#   list - @pytest.mark.parametrize("name", [1, 2, 3])
+parametrize-values-type = "list"
+
+[lint.flake8-quotes]
+
+# Запретить экранирование ковычек
+avoid-escape = true
+
+# Тип ковычек для строк документации
+docstring-quotes = "double"
+
+# Тип ковычек для однострочных строковых  выражений
+inline-quotes = "single"
+
+# Тип ковычек для многострочных строковых выражений
+multiline-quotes = "single"
+
+[lint.flake8-type-checking]
+
+# Модули, для которых не будет срабатывать предупреждение о переносе в type-checking блок
+exempt-modules = ["collections"]
+
+# Если модуль не используется нигде, кроме аннотаций,
+# то обязательно переносить его в TYPE_CHECKING и аннотацию оборачивать в ковычки
+quote-annotations = true
+
+[lint.flake8-unused-arguments]
+
+# *args и **kwargs могут быть неиспользуемыми
+ignore-variadic-names = true
+
+[lint.isort]
+
+# Запретить импорты из нескольких пакетов в одной строке
+force-single-line = false
+
+# Правильный порядок импортов (по типу и алфавиту)
+order-by-type = false
+
+[lint.pylint]
+
+# Максимальное количество аргументов у функции
+max-args = 6
+
+# Максимальная глубина блоков внутри функции (if, for, while, etc)
+max-nested-blocks = 3
+
+[lint.pyupgrade]
+
+# Отдавать предпочтение использованию встроенных аннотаций типов вместо модуля typing
+keep-runtime-typing = true
+
+[format]
+quote-style = "single"  # Применяет одинарные кавычки
+
+docstring-code-format = true
+
+indent-style = "space"  # Устанавливает пробелы вместо табуляции
+
+skip-magic-trailing-comma = false  # Всегда используйте запятые в конце
+
+line-ending = "lf"  # Обеспечивает LF-концы строк (стиль Unix)
