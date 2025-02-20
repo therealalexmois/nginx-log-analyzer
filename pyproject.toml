@@ -24,3 +24,66 @@ pytest-cov = "==6.0.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+python_version = "3.12"         # Обеспечивает совместимость с Python 3.12
+strict = true                   # Включает строгий режим (все основные проверки безопасности)
+ignore_missing_imports = true   # Подавляет сообщения об ошибках импорта, которые не могут быть разрешены.
+warn_unused_ignores = true      # Предупреждает, если # type: ignore является ненужным
+warn_redundant_casts = true     # Предупреждает, если cast() является избыточным
+warn_unused_configs = true      # Предупреждает, если какой-либо параметр конфигурации mypy не используется
+show_error_codes = true         # Отображение подробных кодов ошибок в выходных данных
+pretty = true                   # Красивое оформление сообщений об ошибках
+# Пропускает папки tests/__init__.py, build/, dist/ и venv/
+exclude = [
+    "^tests/.*/__init__\\.py$",  # Exclude test __init__.py files
+    "^build/",
+    "^dist/",
+    "^venv/",
+]
+
+# Кэширование результатов для ускорения последующих запусков
+cache_dir = ".mypy_cache"
+
+# Запрет на нетипизированные функции, вызовы и переменные
+# Заставляет все определения функций иметь подсказки о типе
+disallow_untyped_defs = true
+# Запрещает вызов функций без аннотаций типов из функций с аннотациями типов
+disallow_untyped_calls = true
+# Запрещает определять функции с неполными аннотациями типов,
+# но при этом допускает полностью неаннотированные определения
+disallow_incomplete_defs = true
+# Сообщает об ошибке, когда функция с аннотациями типов украшается декоратором без аннотаций
+disallow_untyped_decorators = false
+
+# Запрещает использование общих типов, в которых не указаны явные параметры типа
+disallow_any_generics = true
+# Запрещает неявные опциональные типы
+no_implicit_optional = true
+
+# Выдает предупреждение при возврате значения с типом Any из функции,
+# объявленной с возвращаемым типом не Any
+warn_return_any = true
+# Выводит предупреждение, когда встречается код, признанный недоступным
+# или избыточным после выполнения анализа типов.
+warn_unreachable = true
+
+# Позволяет переопределять переменные с произвольным типом,
+# если переопределение находится в том же блоке
+# и на том же уровне вложенности, что и исходное определение.
+# Пример, где это может быть полезно:
+allow-redefinition  = false
+
+# Проверяет внутреннюю часть функций без аннотаций типов.
+check_untyped_defs = true
+
+files = ["**/*/*.py"]
+
+follow_imports = "silent"
+ignore_errors = false
+implicit_reexport = false
+local_partial_types = true
+no_implicit_reexport = true
+strict_equality = true
+strict_optional = true
+warn_no_return = true
