@@ -14,9 +14,16 @@ repos:
     -   id: debug-statements
     -   id: detect-private-key
     -   id: end-of-file-fixer
-    -   id: name-tests-test
-        exclude: "^tests/.*/__init__\\.py$"
+    # -   id: name-tests-test
+    #     args: [--pytest-test-first]
+    #     exclude: "^tests/.*/__init__\\.py$"
     -   id: trailing-whitespace
+-   repo: https://github.com/codespell-project/codespell
+    rev: v2.3.0
+    hooks:
+    -   id: codespell
+        name: Spell Checker (backend and frontend)
+        stages: [pre-commit]
 -   repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.10.0
     hooks:
