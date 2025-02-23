@@ -13,7 +13,6 @@ repos:
     -   id: check-yaml
     -   id: debug-statements
     -   id: detect-private-key
-    -   id: double-quote-string-fixer
     -   id: end-of-file-fixer
     -   id: name-tests-test
         exclude: "^tests/.*/__init__\\.py$"
