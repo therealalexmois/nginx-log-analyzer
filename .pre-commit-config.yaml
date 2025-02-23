@@ -15,7 +15,6 @@ repos:
     -   id: detect-private-key
     -   id: end-of-file-fixer
     -   id: name-tests-test
-        args: [--pytest-test-first]
         exclude: "^tests/.*/__init__\\.py$"
     -   id: trailing-whitespace
 -   repo: https://github.com/pre-commit/pygrep-hooks
