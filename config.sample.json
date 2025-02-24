@@ -1,0 +1,8 @@
+{
+    "log_dir": "./logs",
+    "report_dir": "./reports",
+    "report_size": 1000,
+    "error_threshold": 0.1,
+    "log_file": null,
+    "structured_log_path": null
+}
