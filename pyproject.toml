@@ -16,6 +16,7 @@ pre-commit = "==4.1.0"
 ruff = "==0.9.6"
 mypy = "==1.15.0"
 commitizen = "==4.2.1"
+types-pyyaml = "==6.0.12.20241230"
 
 
 [tool.poetry.group.test.dependencies]
