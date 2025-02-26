@@ -174,3 +174,6 @@ indent-style = "space"  # Устанавливает пробелы вместо
 skip-magic-trailing-comma = false  # Всегда используйте запятые в конце
 
 line-ending = "lf"  # Обеспечивает LF-концы строк (стиль Unix)
+
+[per-file-ignores]
+"tests/*" = ["D100", "D101", "D102", "D103", "D104"]
