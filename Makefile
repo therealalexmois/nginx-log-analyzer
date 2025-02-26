@@ -81,7 +81,7 @@ clean:
 ci-checks: lint type-check
 
 start:
-	@$(PYTHON) -m nginx_log_analyzer.main
+	@$(PYTHON) -m src.nginx_log_analyzer.main
 
 # Цель по умолчанию (установка зависимостей)
 default: install
