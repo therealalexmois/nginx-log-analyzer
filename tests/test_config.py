@@ -1,5 +1,3 @@
-"""Тесты для модуля конфигурации `src/nginx_log_analyzer/config.py`."""
-
 import tempfile
 from pathlib import Path
 from typing import TYPE_CHECKING

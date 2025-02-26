@@ -1,5 +1,3 @@
-"""Тесты для модуля `src.nginx_log_analyzer.log_parser.py`."""
-
 import gzip
 import tempfile
 from datetime import datetime
