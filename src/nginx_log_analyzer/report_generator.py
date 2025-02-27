@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
 log = structlog.get_logger()
 
-REPORT_TEMPLATE_PATH = Path(__file__).parent / 'report.html'
+REPORT_TEMPLATE_PATH = Path().absolute().joinpath('report.html')
 
 
 def generate_report(data: 'Sequence[StatisticEntry]', report_path: Path) -> None:
