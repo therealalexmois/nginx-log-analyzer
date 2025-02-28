@@ -212,7 +212,7 @@ def test_logging_error(mocker: 'MockerFixture') -> None:
     Returns:
         None: Функция выполняет проверки с помощью `assert`, не возвращает значений.
     """
-    error_log_mock = mocker.patch('src.nginx_log_analyzer.log_parser.log.error')
+    error_log_mock = mocker.patch('src.nginx_log_analyzer.logger.logger.error')
 
     log_lines = log_generator(
         [

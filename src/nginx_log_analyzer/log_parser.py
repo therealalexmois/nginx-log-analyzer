@@ -67,14 +67,12 @@ from datetime import datetime
 from enum import Enum
 from typing import TYPE_CHECKING
 
-import structlog
+from src.nginx_log_analyzer.logger import logger
 
 if TYPE_CHECKING:
     from collections.abc import Generator
     from pathlib import Path
 
-
-log = structlog.get_logger()
 
 LOG_FILENAME_PATTERN = re.compile(r'nginx-access-ui\.log-(\d{8})(\.gz)?$')
 LOG_LINE_PATTERN = re.compile(
@@ -211,13 +209,13 @@ def parse_log(
             errors += 1
 
     if total_lines == 0:
-        log.warning('Empty log file provided')
+        logger.warning('Empty log file provided')
         return None
 
     error_rate = errors / total_lines
 
     if error_rate > error_threshold:
-        log.error(
+        logger.error(
             'Превышен допустимый порог ошибок разбора логов',
             error_rate=f'{error_rate:.2%}',
             error_threshold=f'{error_threshold:.2%}',

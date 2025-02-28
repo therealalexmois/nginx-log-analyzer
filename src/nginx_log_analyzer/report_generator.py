@@ -11,14 +11,13 @@ import string
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-import structlog
+from src.nginx_log_analyzer.logger import logger
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
     from src.nginx_log_analyzer.stats_calculator import StatisticEntry
 
-log = structlog.get_logger()
 
 REPORT_TEMPLATE_PATH = Path().absolute().joinpath('report.html')
 
@@ -31,7 +30,7 @@ def generate_report(data: 'Sequence[StatisticEntry]', report_path: Path) -> None
         report_path (Path): Путь для сохранения отчета.
     """
     if not REPORT_TEMPLATE_PATH.exists():
-        log.error('Шаблон отчета не найден', path=str(REPORT_TEMPLATE_PATH))
+        logger.error('Шаблон отчета не найден', path=str(REPORT_TEMPLATE_PATH))
         raise FileNotFoundError(f'Шаблон отчета отсутствует: {REPORT_TEMPLATE_PATH}')
 
     # Читаем HTML-шаблон
@@ -46,4 +45,4 @@ def generate_report(data: 'Sequence[StatisticEntry]', report_path: Path) -> None
 
     # Сохраняем отчет
     report_path.write_text(report_html, encoding='utf-8')
-    log.info('Отчет успешно сохранен', report_path=str(report_path))
+    logger.info('Отчет успешно сохранен', report_path=str(report_path))

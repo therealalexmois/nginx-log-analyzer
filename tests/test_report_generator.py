@@ -1,6 +1,8 @@
 import json
 from typing import TYPE_CHECKING
 
+import pytest
+
 from src.nginx_log_analyzer.report_generator import generate_report, REPORT_TEMPLATE_PATH
 from src.nginx_log_analyzer.stats_calculator import StatisticEntry
 
@@ -58,9 +60,10 @@ def test_generate_report_logs_error_if_template_missing(mocker: 'MockerFixture',
 
     report_path = tmp_path / test_report_name
 
-    log_mock = mocker.patch('src.nginx_log_analyzer.report_generator.log')
+    log_mock = mocker.patch('src.nginx_log_analyzer.report_generator.logger')
 
-    generate_report([], report_path)
+    with pytest.raises(FileNotFoundError, match=f'Шаблон отчета отсутствует: {REPORT_TEMPLATE_PATH}'):
+        generate_report([], report_path)
 
     log_mock.error.assert_called_once_with(
         'Шаблон отчета не найден',
