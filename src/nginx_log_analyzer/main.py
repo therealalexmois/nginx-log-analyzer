@@ -14,30 +14,16 @@ import sys
 from contextlib import closing
 
 from src.nginx_log_analyzer.cli import parse_args
-from src.nginx_log_analyzer.config import ConfigModel
+from src.nginx_log_analyzer.config import ConfigModel, set_config
 from src.nginx_log_analyzer.log_parser import find_latest_log, LogParsingError, parse_log, unzip_if_needed
-from src.nginx_log_analyzer.logger import logger
+from src.nginx_log_analyzer.logger import configure_logging, get_logger
 from src.nginx_log_analyzer.report_generator import generate_report
 from src.nginx_log_analyzer.stats_calculator import calculate_statistics
 
 
 def main() -> None:
     """Основной процесс выполнения лог-анализатора."""
-    args = parse_args()
-
-    # 1. Загружаем конфигурацию
-    try:
-        config = ConfigModel.from_toml(args.config) if args.config else ConfigModel()
-    except FileNotFoundError as e:
-        logger.error('Ошибка: Файл конфигурации не найден', path=args.config, error=str(e))
-        sys.exit(1)
-    except ValueError as e:
-        logger.error('Ошибка: Некорректный формат файла конфигурации', error=str(e))
-        sys.exit(1)
-    except Exception as e:
-        logger.error('Неизвестная ошибка при загрузке конфигурации', error=str(e))
-        sys.exit(1)
-
+    logger = get_logger()
     logger.info('Конфигурация загружена', config=config)
 
     # 2. Ищем последний доступный лог-файл
@@ -89,4 +75,24 @@ def main() -> None:
 
 
 if __name__ == '__main__':
+    try:
+        args = parse_args()
+    except SystemExit as e:
+        get_logger().error('Ошибка: Некорректные аргументы командной строки.')
+        sys.exit(e.code)
+
+    try:
+        config = ConfigModel.from_toml(args.config) if args.config else ConfigModel()
+        set_config(config)
+    except FileNotFoundError:
+        get_logger().error('Ошибка: Файл конфигурации не найден', path=args.config)
+        sys.exit(1)
+    except ValueError as e:
+        get_logger().error('Ошибка: Некорректный формат файла конфигурации', error=str(e))
+        sys.exit(1)
+    except Exception as e:
+        get_logger().error('Неизвестная ошибка при загрузке конфигурации', error=str(e))
+        sys.exit(1)
+
+    configure_logging(log_file=config.log_file)
     main()

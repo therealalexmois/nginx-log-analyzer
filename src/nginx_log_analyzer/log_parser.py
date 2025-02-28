@@ -57,8 +57,6 @@
     >>>         print(entries[:5])  # Выведет первые 5 записей
 """
 
-# TODO: Написать функцию process_logs
-# TODO: Подумать над классом Parser
 import gzip
 import re
 from collections import namedtuple
@@ -67,12 +65,14 @@ from datetime import datetime
 from enum import Enum
 from typing import TYPE_CHECKING
 
-from src.nginx_log_analyzer.logger import logger
+from src.nginx_log_analyzer.logger import get_logger
 
 if TYPE_CHECKING:
     from collections.abc import Generator
     from pathlib import Path
 
+
+logger = get_logger()
 
 LOG_FILENAME_PATTERN = re.compile(r'nginx-access-ui\.log-(\d{8})(\.gz)?$')
 LOG_LINE_PATTERN = re.compile(

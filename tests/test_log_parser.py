@@ -42,9 +42,6 @@ def test_find_latest_log(temp_log_dir: Path) -> None:
 
     Args:
         temp_log_dir (Path): Временная директория для тестирования.
-
-    Returns:
-        None: Функция выполняет проверки с помощью `assert`, не возвращает значений.
     """
     (temp_log_dir / 'nginx-access-ui.log-20250201').touch()
     (temp_log_dir / 'nginx-access-ui.log-20250202.gz').touch()
@@ -63,9 +60,6 @@ def test_find_latest_log_no_logs(temp_log_dir: Path) -> None:
 
     Args:
         temp_log_dir (Path): Временная директория для тестирования.
-
-    Returns:
-        None: Функция выполняет проверки с помощью `assert`, не возвращает значений.
     """
     latest_log = find_latest_log(temp_log_dir)
     assert latest_log is None, 'Должно вернуться None, если в директории нет логов'
@@ -75,9 +69,6 @@ def test_unzip_if_needed_plain_file() -> None:
     """Проверяет на чтение текстового файла.
 
     Создает временный текстовый файл журнала и гарантирует, что `unzip_if_needed` правильно прочитает его содержимое.
-
-    Returns:
-        None: Функция выполняет проверки с помощью `assert`, не возвращает значений.
     """
     with tempfile.NamedTemporaryFile(delete=False, mode='w', encoding='utf-8') as temp_file:
         temp_file.write('Line 1\nLine 2\n')
@@ -118,9 +109,6 @@ def test_parse_log_valid_entries() -> None:
     """Тест на успешный разбор строк логов.
 
     Проверяет, что `parse_log` корректно извлекает URL и request_time из логов.
-
-    Returns:
-        None: Функция выполняет проверки с помощью `assert`, не возвращает значений.
     """
     log_lines = log_generator(
         [
@@ -149,9 +137,6 @@ def test_parse_log_with_errors() -> None:
 
     Проверяет, что `parse_log` игнорирует некорректные строки, но продолжает обработку,
     если процент ошибок не превышает допустимый `error_threshold`.
-
-    Returns:
-        None: Функция выполняет проверки с помощью `assert`, не возвращает значений.
     """
     log_lines = log_generator(
         [
@@ -174,9 +159,6 @@ def test_parse_log_exceeds_error_threshold() -> None:
     """Тест на выброс исключения, если ошибки парсинга превышают допустимый порог.
 
     Проверяет, что `parse_log` выбрасывает `LogParsingError`, если процент ошибок превышает `error_threshold`.
-
-    Returns:
-        None: Функция выполняет проверки с помощью `assert`, не возвращает значений.
     """
     log_lines = log_generator(
         [
@@ -205,14 +187,8 @@ def test_logging_error(mocker: 'MockerFixture') -> None:
 
     Проверяет, что `parse_log` вызывает логирование ошибки,
     если процент ошибок превышает `error_threshold`.
-
-    Args:
-        mocker (MockerFixture): Фикстура для мокирования логирования.
-
-    Returns:
-        None: Функция выполняет проверки с помощью `assert`, не возвращает значений.
     """
-    error_log_mock = mocker.patch('src.nginx_log_analyzer.logger.logger.error')
+    error_log_mock = mocker.patch('src.nginx_log_analyzer.log_parser.logger.error')
 
     log_lines = log_generator(
         [

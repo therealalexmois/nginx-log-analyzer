@@ -11,7 +11,7 @@ import string
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from src.nginx_log_analyzer.logger import logger
+from src.nginx_log_analyzer.logger import get_logger
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     from src.nginx_log_analyzer.stats_calculator import StatisticEntry
 
 
+logger = get_logger()
 REPORT_TEMPLATE_PATH = Path().absolute().joinpath('report.html')
 
 

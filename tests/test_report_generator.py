@@ -56,15 +56,14 @@ def test_generate_report_logs_error_if_template_missing(mocker: 'MockerFixture',
     test_report_name = 'missing_template_report.html'
     report_path = tmp_path / test_report_name
 
-    # ✅ Create a fake path for a missing template
     missing_template_path = tmp_path / 'missing_template.html'
 
-    log_mock = mocker.patch('src.nginx_log_analyzer.report_generator.logger')
+    error_log_mock = mocker.patch('src.nginx_log_analyzer.report_generator.logger.error')
 
     with pytest.raises(FileNotFoundError, match=f'Шаблон отчета отсутствует: {missing_template_path}'):
         generate_report([], report_path, missing_template_path)
 
-    log_mock.error.assert_called_once_with(
+    error_log_mock.assert_called_once_with(
         'Шаблон отчета не найден',
         path=str(missing_template_path),
     )

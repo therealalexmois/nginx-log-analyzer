@@ -180,3 +180,20 @@ class ConfigModel:
         if not isinstance(value, (int | float)) or not (0.0 <= value <= 1.0):
             raise ValueError(f'error_threshold должен быть числом от 0 до 1: {value}')
         return float(value)
+
+
+_CONFIG_CONTAINER: dict[str, 'ConfigModel'] = {}
+
+
+def set_config(config: 'ConfigModel') -> None:
+    """Устанавливает глобальную конфигурацию."""
+    if 'instance' in _CONFIG_CONTAINER:
+        raise RuntimeError('Конфигурация уже установлена и не может быть изменена.')
+    _CONFIG_CONTAINER['instance'] = config
+
+
+def get_config() -> 'ConfigModel':
+    """Возвращает глобальную конфигурацию, установленную через `set_config`."""
+    if 'instance' not in _CONFIG_CONTAINER:
+        raise RuntimeError('Конфигурация не установлена. Вызовите `set_config()` перед `get_config()`.')
+    return _CONFIG_CONTAINER['instance']
