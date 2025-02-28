@@ -75,6 +75,8 @@ ignore = [
     "Q001",     # Избегание конфликтов с форматировщиком Ruff, принудительно использующим двойные кавычки
 ]
 
+per-file-ignores = { "tests/*" = ["D100", "D101", "D102", "D103", "D104"] }
+
 [lint.pydocstyle]
 convention = "google"
 
@@ -174,6 +176,3 @@ indent-style = "space"  # Устанавливает пробелы вместо
 skip-magic-trailing-comma = false  # Всегда используйте запятые в конце
 
 line-ending = "lf"  # Обеспечивает LF-концы строк (стиль Unix)
-
-[per-file-ignores]
-"tests/*" = ["D100", "D101", "D102", "D103", "D104"]
