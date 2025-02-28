@@ -32,7 +32,7 @@ def generate_report(data: 'Sequence[StatisticEntry]', report_path: Path) -> None
     """
     if not REPORT_TEMPLATE_PATH.exists():
         log.error('Шаблон отчета не найден', path=str(REPORT_TEMPLATE_PATH))
-        return
+        raise FileNotFoundError(f'Шаблон отчета отсутствует: {REPORT_TEMPLATE_PATH}')
 
     # Читаем HTML-шаблон
     template_content = REPORT_TEMPLATE_PATH.read_text(encoding='utf-8')
