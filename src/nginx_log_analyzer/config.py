@@ -22,6 +22,8 @@ DEFAULT_LOG_DIR = Path().absolute().joinpath('logs')
 DEFAULT_REPORT_DIR = Path().absolute().joinpath('reports')
 DEFAULT_REPORT_SIZE = 1000
 DEFAULT_ERROR_THRESHOLD = 0.1
+DEFAULT_REPORT_TEMPLATE_FILENAME = 'report.html'
+DEFAULT_REPORT_TEMPLATE_PATH = Path().absolute().joinpath(DEFAULT_REPORT_TEMPLATE_FILENAME)
 
 
 @dataclass(frozen=True)
@@ -38,6 +40,7 @@ class ConfigModel:
     log_file: Path | None = None
     report_size: int = DEFAULT_REPORT_SIZE
     error_threshold: float = DEFAULT_ERROR_THRESHOLD
+    report_template_path: Path = field(default=DEFAULT_REPORT_TEMPLATE_PATH)
 
     @classmethod
     def from_dict(cls, config_data: dict[str, 'Any']) -> 'ConfigModel':
@@ -53,11 +56,12 @@ class ConfigModel:
             ValueError: Если параметры не проходят валидацию.
         """
         return cls(
-            log_dir=cls._validate_directory(config_data.get('log_dir', DEFAULT_LOG_DIR), 'log_dir'),
-            report_dir=cls._validate_directory(config_data.get('report_dir', DEFAULT_REPORT_DIR), 'report_dir'),
-            log_file=cls._validate_log_file(config_data.get('log_file')),
-            report_size=cls._validate_report_size(config_data.get('report_size', DEFAULT_REPORT_SIZE)),
             error_threshold=cls._validate_error_threshold(config_data.get('error_threshold', DEFAULT_ERROR_THRESHOLD)),
+            log_dir=cls._validate_directory(config_data.get('log_dir', DEFAULT_LOG_DIR), 'log_dir'),
+            log_file=cls._validate_log_file(config_data.get('log_file')),
+            report_dir=cls._validate_directory(config_data.get('report_dir', DEFAULT_REPORT_DIR), 'report_dir'),
+            report_size=cls._validate_report_size(config_data.get('report_size', DEFAULT_REPORT_SIZE)),
+            report_template_path=cls.report_template_path,
         )
 
     @classmethod
@@ -96,11 +100,12 @@ class ConfigModel:
         error_threshold = config_data.get('error_threshold', DEFAULT_ERROR_THRESHOLD)
 
         return cls(
-            log_dir=cls._validate_directory(log_dir, 'log_dir'),
-            report_dir=cls._validate_directory(report_dir, 'report_dir'),
-            log_file=log_file,
-            report_size=cls._validate_report_size(report_size),
             error_threshold=cls._validate_error_threshold(error_threshold),
+            log_dir=cls._validate_directory(log_dir, 'log_dir'),
+            log_file=log_file,
+            report_dir=cls._validate_directory(report_dir, 'report_dir'),
+            report_size=cls._validate_report_size(report_size),
+            report_template_path=cls.report_template_path,
         )
 
     @staticmethod

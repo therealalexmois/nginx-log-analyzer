@@ -22,19 +22,20 @@ if TYPE_CHECKING:
 REPORT_TEMPLATE_PATH = Path().absolute().joinpath('report.html')
 
 
-def generate_report(data: 'Sequence[StatisticEntry]', report_path: Path) -> None:
+def generate_report(data: 'Sequence[StatisticEntry]', report_path: Path, template_path: Path) -> None:
     """Генерирует HTML-отчет и сохраняет его в файл.
 
     Args:
-        data (Sequence[StatisticEntry]): Список объектов `StatisticEntry` со статистикой.
-        report_path (Path): Путь для сохранения отчета.
+        data: Список объектов `StatisticEntry` со статистикой.
+        report_path: Путь для сохранения отчета.
+        template_path: Путь к HTML-шаблону отчета.
     """
-    if not REPORT_TEMPLATE_PATH.exists():
-        logger.error('Шаблон отчета не найден', path=str(REPORT_TEMPLATE_PATH))
-        raise FileNotFoundError(f'Шаблон отчета отсутствует: {REPORT_TEMPLATE_PATH}')
+    if not template_path.exists():
+        logger.error('Шаблон отчета не найден', path=str(template_path))
+        raise FileNotFoundError(f'Шаблон отчета отсутствует: {template_path}')
 
     # Читаем HTML-шаблон
-    template_content = REPORT_TEMPLATE_PATH.read_text(encoding='utf-8')
+    template_content = template_path.read_text(encoding='utf-8')
 
     # Формируем JSON для вставки в отчет
     table_json = json.dumps(data, ensure_ascii=False, indent=2)

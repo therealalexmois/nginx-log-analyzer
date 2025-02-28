@@ -77,7 +77,7 @@ def main() -> None:
         report_data = statistics[: config.report_size]
 
         # 7. Генерируем отчет
-        generate_report(report_data, report_path)
+        generate_report(report_data, report_path, config.report_template_path)
         logger.info('Отчет успешно создан', report_path=str(report_path), report_name=report_filename)
 
     except LogParsingError as e:
