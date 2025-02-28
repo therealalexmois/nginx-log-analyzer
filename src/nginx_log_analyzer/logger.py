@@ -1,6 +1,8 @@
 """Настройка логирования через Structlog с JSON-выводом."""
 
+import json
 import sys
+from functools import partial
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -11,11 +13,11 @@ import structlog
 DEFAULT_LOGGER_NAME = 'nginx_log_analyzer'
 
 
-def get_logger(app_name: str = DEFAULT_LOGGER_NAME, log_level: str = 'info') -> structlog.BoundLogger:
+def configure_logging(app_name: str = DEFAULT_LOGGER_NAME, log_level: str = 'info') -> structlog.BoundLogger:
     """Создаёт и возвращает настроенный Structlog-логгер.
 
     Args:
-        app_name (str): Название логгера (по умолчанию "app").
+        app_name (str): Название логгера (по умолчанию "nginx_log_analyzer").
         log_level (str): Уровень логирования (debug, info, warning, error).
 
     Returns:
@@ -34,14 +36,16 @@ def get_logger(app_name: str = DEFAULT_LOGGER_NAME, log_level: str = 'info') -> 
 
     structlog.configure(
         processors=[
-            structlog.processors.TimeStamper(fmt='iso'),
+            structlog.processors.TimeStamper(fmt='iso', utc=True),
             structlog.processors.add_log_level,
-            structlog.processors.JSONRenderer(),
+            structlog.processors.JSONRenderer(serializer=partial(json.dumps, ensure_ascii=False)),
         ],
+        context_class=dict,
+        logger_factory=structlog.PrintLoggerFactory(),
         cache_logger_on_first_use=True,
     )
 
     return structlog.get_logger(app_name).bind(app=app_name, log_level=log_level)
 
 
-logger = get_logger()
+logger = configure_logging()
