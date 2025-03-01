@@ -170,6 +170,14 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-# Logs and reports
-logs/
+# Reports
 reports/
+
+# Ignore log filesologs/
+logs/
+*.log
+*.log.*
+*.gz
+*.bz2
+*.zip
+*.tar
