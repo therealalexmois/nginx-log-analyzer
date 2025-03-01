@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from src.nginx_log_analyzer.log_parser import find_latest_log, LogFileType, parse_log, unzip_if_needed
+from src.nginx_log_analyzer.log_parser import find_latest_log, LogFileType, parse_log, ParsedLogEntry, unzip_if_needed
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -228,3 +228,31 @@ def test_logging_error(mocker: 'MockerFixture') -> None:
         total_lines=3,
         errors=3,
     )
+
+
+def test_parse_log_yields_entries() -> None:
+    """Проверяет, что parse_log является генератором и корректно отдает записи."""
+    log_lines = log_generator(
+        [
+            '1.1.1.1 - - [01/Jan/2024:10:00:00 +0000] "GET /api/data HTTP/1.1" 200 123 "-" "-" "-" "-" "-" 0.150',
+            '2.2.2.2 - - [01/Jan/2024:10:01:00 +0000] "GET /api/test HTTP/1.1" 200 456 "-" "-" "-" "-" "-" 0.250',
+        ]
+    )
+
+    error_threshold = 0.5  # Допустимый уровень ошибок
+    parsed_entries = list(parse_log(log_lines, error_threshold))
+
+    expected_entries = [
+        ParsedLogEntry(url='/api/data', request_time=0.150),
+        ParsedLogEntry(url='/api/test', request_time=0.250),
+    ]
+
+    assert parsed_entries == expected_entries, 'Разобранные записи не соответствуют ожидаемым значениям'
+
+
+def test_parse_log_empty_file() -> None:
+    """Проверяет, что parse_log корректно обрабатывает пустой файл."""
+    log_lines = log_generator([])
+    parsed_entries = list(parse_log(log_lines, error_threshold=0.1))
+
+    assert len(parsed_entries) == 0, 'Пустой файл журнала должен возвращать пустой список'

@@ -167,17 +167,18 @@ def parse_log(
     """
     errors = 0
     total_lines = 0
-    parsed_count = 0
+    parsed_entries: list[ParsedLogEntry] = []
 
     for line in log_file:
         total_lines += 1
         match = LOG_LINE_PATTERN.match(line.strip())
 
         if match:
-            parsed_count += 1
-            yield ParsedLogEntry(
-                url=match.group('url'),
-                request_time=float(match.group('request_time')),
+            parsed_entries.append(
+                ParsedLogEntry(
+                    url=match.group('url'),
+                    request_time=float(match.group('request_time')),
+                )
             )
         else:
             errors += 1
@@ -197,3 +198,5 @@ def parse_log(
             errors=errors,
         )
         raise ValueError(f'Превышен порог ошибок при разборе логов: {error_rate:.2%} (допустимо {error_threshold:.2%})')
+
+    yield from parsed_entries
