@@ -1,0 +1,27 @@
+# Ignore Python cache and virtual environments
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+*.egg-info/
+.poetry-cache/
+
+# Ignore logs and reports
+logs/
+reports/
+
+# Ignore Git and local development files
+.git/
+.gitignore
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Ignore test files and coverage reports
+tests/
+.coverage
+htmlcov/
+*.log
