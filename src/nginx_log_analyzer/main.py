@@ -15,7 +15,7 @@ from contextlib import closing
 
 from src.nginx_log_analyzer.cli import parse_args
 from src.nginx_log_analyzer.config import ConfigModel, set_config
-from src.nginx_log_analyzer.log_parser import find_latest_log, LogParsingError, parse_log, unzip_if_needed
+from src.nginx_log_analyzer.log_parser import find_latest_log, parse_log, unzip_if_needed
 from src.nginx_log_analyzer.logger import configure_logging, get_logger
 from src.nginx_log_analyzer.report_generator import generate_report
 from src.nginx_log_analyzer.stats_calculator import calculate_statistics
@@ -66,7 +66,7 @@ def main() -> None:
         generate_report(report_data, report_path, config.report_template_path)
         logger.info('Отчет успешно создан', report_path=str(report_path), report_name=report_filename)
 
-    except LogParsingError as e:
+    except ValueError as e:
         logger.error('Ошибка парсинга логов', error=str(e))
         sys.exit(1)
     except Exception as e:

@@ -20,9 +20,6 @@
         - Дата из имени файла.
         - Тип файла (обычный или сжатый).
 
-    LogParsingError (Exception):
-        Исключение, выбрасываемое при превышении порога ошибок парсинга.
-
 Функции:
     find_latest_log:
         Ищет самый свежий лог-файл в указанной директории.
@@ -45,7 +42,7 @@
         Структура данных для хранения распарсенных URL и request_time.
 
 Исключения:
-    LogParsingError:
+    ValueError:
         Выбрасывается, если процент ошибок при разборе логов превышает `error_threshold`.
 
 Пример использования:
@@ -149,29 +146,6 @@ def unzip_if_needed(log_path: 'Path') -> 'Generator[str, None, None]':
             yield from f
 
 
-class LogParsingError(Exception):
-    """Ошибка парсинга логов, возникающая при превышении допустимого порога ошибок."""
-
-    def __init__(self, error_rate: float, error_threshold: float, total_lines: int, errors: int) -> None:
-        """Создает исключение с детальной информацией о проблеме.
-
-        Args:
-            error_rate (float): Фактический процент ошибок.
-            error_threshold (float): Допустимый процент ошибок.
-            total_lines (int): Общее количество обработанных строк.
-            errors (int): Количество ошибок парсинга.
-        """
-        super().__init__(
-            f'Превышен порог ошибок при разборе логов: '
-            f'{error_rate:.2%} (допустимо {error_threshold:.2%}) '
-            f'({errors} ошибок из {total_lines} строк).'
-        )
-        self.error_rate = error_rate
-        self.error_threshold = error_threshold
-        self.total_lines = total_lines
-        self.errors = errors
-
-
 ParsedLogEntry = namedtuple('ParsedLogEntry', ['url', 'request_time'])
 
 
@@ -222,4 +196,4 @@ def parse_log(
             total_lines=total_lines,
             errors=errors,
         )
-        raise LogParsingError(error_rate, error_threshold, total_lines, errors)
+        raise ValueError(f'Превышен порог ошибок при разборе логов: {error_rate:.2%} (допустимо {error_threshold:.2%})')

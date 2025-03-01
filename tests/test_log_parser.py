@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from src.nginx_log_analyzer.log_parser import find_latest_log, LogFileType, LogParsingError, parse_log, unzip_if_needed
+from src.nginx_log_analyzer.log_parser import find_latest_log, LogFileType, parse_log, unzip_if_needed
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -158,7 +158,7 @@ def test_parse_log_with_errors() -> None:
 def test_parse_log_exceeds_error_threshold() -> None:
     """Тест на выброс исключения, если ошибки парсинга превышают допустимый порог.
 
-    Проверяет, что `parse_log` выбрасывает `LogParsingError`, если процент ошибок превышает `error_threshold`.
+    Проверяет, что `parse_log` выбрасывает `ValueError`, если процент ошибок превышает `error_threshold`.
     """
     log_lines = log_generator(
         [
@@ -170,16 +170,13 @@ def test_parse_log_exceeds_error_threshold() -> None:
     )
 
     error_threshold = 0.25
-    total_lines = 4
-    error_count = 3
 
-    with pytest.raises(LogParsingError, match=r'Превышен порог ошибок при разборе логов: \d+\.\d+%') as exc_info:
+    with pytest.raises(
+        ValueError, match=r'Превышен порог ошибок при разборе логов: \d+\.\d+% \(допустимо \d+\.\d+%\)'
+    ) as exc_info:
         list(parse_log(log_lines, error_threshold=error_threshold))
 
-    exc = exc_info.value
-    assert exc.error_rate > error_threshold, 'Error rate should exceed threshold'
-    assert exc.total_lines == total_lines, 'Total lines should be 4'
-    assert exc.errors == error_count, 'Error count should be 3'
+    assert 'Превышен порог ошибок' in str(exc_info.value)
 
 
 def test_logging_error(mocker: 'MockerFixture') -> None:
@@ -200,7 +197,7 @@ def test_logging_error(mocker: 'MockerFixture') -> None:
 
     error_threshold = 0.2
 
-    with pytest.raises(LogParsingError):
+    with pytest.raises(ValueError):
         list(parse_log(log_lines, error_threshold=error_threshold))
 
     error_log_mock.assert_called_once_with(
