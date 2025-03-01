@@ -4,12 +4,12 @@
   <p align="center">
     A Python-based tool for parsing and analyzing Nginx access logs.
     <br />
-    <a href="https://github.com/your-username/nginx-log-analyzer"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/therealalexmois/nginx-log-analyzer"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/your-username/nginx-log-analyzer/issues">Report Bug</a>
+    <a href="https://github.com/therealalexmois/nginx-log-analyzer/issues">Report Bug</a>
     ·
-    <a href="https://github.com/your-username/nginx-log-analyzer/issues">Request Feature</a>
+    <a href="https://github.com/therealalexmois/nginx-log-analyzer/issues">Request Feature</a>
   </p>
 </p>
 
