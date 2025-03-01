@@ -37,6 +37,27 @@ def temp_log_dir() -> 'Generator[Path, None, None]':
         yield Path(temp_dir)
 
 
+@pytest.fixture
+def mock_log_directory(tmp_path: Path) -> Path:
+    """Создает временную директорию с лог-файлами для теста."""
+    (tmp_path / 'nginx-access-ui.log-20250210').touch()
+    (tmp_path / 'nginx-access-ui.log-20250212').touch()
+    (tmp_path / 'nginx-access-ui.log-20250214.gz').touch()
+    (tmp_path / 'nginx-access-ui.log-20250216.bz2').touch()
+
+    return tmp_path
+
+
+def test_find_latest_log_ignores_bz2_files(mock_log_directory: Path) -> None:
+    """Проверяет, что файлы .bz2 игнорируются при поиске последнего лога."""
+    latest_log = find_latest_log(mock_log_directory)
+
+    assert latest_log is not None, 'Ожидалось, что будет найден лог-файл'
+    assert latest_log.path.suffix != '.bz2', 'Файл с расширением .bz2 не должен учитываться'
+    assert latest_log.date == datetime(2025, 2, 14), 'Ожидалось, что будет найден лог от 2025-02-14'
+    assert latest_log.file_type == LogFileType.GZ, 'Ожидалось, что файл будет GZ-архивом'
+
+
 def test_find_latest_log(temp_log_dir: Path) -> None:
     """Проверить поиск самого последнего лога в директории по дате в имени файла.
 
